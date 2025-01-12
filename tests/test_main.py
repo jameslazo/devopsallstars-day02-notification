@@ -52,3 +52,12 @@ def test_lambda_sns_publish(create_sns_topic, sns_backend):
     sent_notifications = sns_backend.topics[os.environ["SNS_TOPIC_ARN"]].sent_notifications
     assert len(sent_notifications) == 1
 
+    # Inspect notification structure
+    # assert False, sent_notifications
+
+    # Unpack the tuple correctly based on structure
+    message_id, message_body, subject, message_attributes, _ = sent_notifications[0]
+
+    # Validate message content and subject
+    assert "Game Status:" in message_body
+    assert subject == "NBA Game Updates"
