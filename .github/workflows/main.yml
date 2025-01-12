@@ -40,5 +40,5 @@ jobs:
       - name: Deploy Lambda Function to AWS
         run: |
           FUNCTION_NAME="devops_day02_lambda"
-          aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://lambda_function.zip
           aws lambda update-function-configuration --function-name $FUNCTION_NAME --environment "Variables={NBA_API_KEY=${{ secrets.API_KEY }},SNS_TOPIC_ARN=${{ secrets.SNS_TOPIC_ARN }}}"
+          aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://lambda_function.zip
