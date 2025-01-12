@@ -25,12 +25,12 @@ jobs:
       - name: Pack Lambda
         run: |
           mkdir -p lambda_function
-          cp src lambda_function.py lambda_function/
+          cp -r src/lambda_function.py lambda_function/
           # Install dependencies into the package folder
           pip install -r requirements.txt -t lambda_function/
           # Zip the Lambda function
           cd lambda_function
-          zip -r .. lambda_function.zip .
+          zip -r ../lambda_function.zip .
       - name: Configure AWS credentials from repo
         uses: aws-actions/configure-aws-credentials@v1
         with:
