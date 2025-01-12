@@ -31,8 +31,14 @@ jobs:
           # Zip the Lambda function
           cd main
           zip -r ../main.zip .
+      - name: Configure AWS credentials from repo
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.ROLE_ARN }}  
+          aws-region: us-east-1
+          role-session-name: GitHubActionSession
       - name: Deploy Lambda Function to AWS
         run: |
           FUNCTION_NAME="devops_day02_lambda"
-          aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://main.zip --region us-east-1
+          aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://main.zip
           aws lambda update-function-configuration --function-name $FUNCTION_NAME --environment "Variables={NBA_API_KEY=${{ secrets.API_KEY }},SNS_TOPIC_ARN=${{ secrets.SNS_TOPIC_ARN }}}"
