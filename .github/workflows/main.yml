@@ -24,13 +24,13 @@ jobs:
         run: pytest --junitxml=pytest-report.xml
       - name: Pack Lambda
         run: |
-          mkdir -p main
-          cp src/main.py main/
+          mkdir -p lambda_function
+          cp src lambda_function.py lambda_function/
           # Install dependencies into the package folder
-          pip install -r requirements.txt -t main/
+          pip install -r requirements.txt -t lambda_function/
           # Zip the Lambda function
-          cd main
-          zip -r ../main.zip .
+          cd lambda_function
+          zip -r .. lambda_function.zip .
       - name: Configure AWS credentials from repo
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -40,5 +40,5 @@ jobs:
       - name: Deploy Lambda Function to AWS
         run: |
           FUNCTION_NAME="devops_day02_lambda"
-          aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://main.zip
+          aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://lambda_function.zip
           aws lambda update-function-configuration --function-name $FUNCTION_NAME --environment "Variables={NBA_API_KEY=${{ secrets.API_KEY }},SNS_TOPIC_ARN=${{ secrets.SNS_TOPIC_ARN }}}"

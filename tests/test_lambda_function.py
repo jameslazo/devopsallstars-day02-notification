@@ -3,7 +3,7 @@ from moto.core import DEFAULT_ACCOUNT_ID
 from moto.sns import sns_backends # https://docs.getmoto.org/en/latest/docs/services/sns.html
 import boto3
 import pytest
-from src.main import lambda_handler
+from src.lambda_function import lambda_handler
 import os
 from dotenv import load_dotenv
 
