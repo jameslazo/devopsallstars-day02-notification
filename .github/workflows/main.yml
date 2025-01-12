@@ -22,3 +22,17 @@ jobs:
           pip install pytest
       - name: Run tests with pytest\
         run: pytest --junitxml=pytest-report.xml
+      - name: Pack Lambda
+        run: |
+          mkdir -p main
+          cp main.py main/
+          # Install dependencies into the package folder
+          pip install -r requirements.txt -t main/
+          # Zip the Lambda function
+          cd main
+          zip -r ../main.zip .
+      - name: Deploy Lambda Function to AWS
+        run: |
+          FUNCTION_NAME="devops_day02_lambda"
+          aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://main.zip
+          aws lambda update-function-configuration --function-name $FUNCTION_NAME --environment "Variables={NBA_API_KEY=${{ secrets.API_KEY }},SNS_TOPIC_ARN=${{ secrets.SNS_TOPIC_ARN }}}"
