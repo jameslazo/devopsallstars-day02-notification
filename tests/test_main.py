@@ -47,3 +47,8 @@ def test_lambda_sns_publish(create_sns_topic, sns_backend):
     # Assertions for successful Lambda execution
     assert response["statusCode"] == 200
     assert "Data processed and sent to SNS" in response["body"]
+
+    # Verify message was published to SNS using the moto backend
+    sent_notifications = sns_backend.topics[os.environ["SNS_TOPIC_ARN"]].sent_notifications
+    assert len(sent_notifications) == 1
+
